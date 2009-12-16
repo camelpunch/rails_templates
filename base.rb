@@ -24,9 +24,42 @@ module ActionView
 end
 RUBY
 
+# no default route
+File.open('config/routes.rb', 'w') do |file|
+  file << <<-RUBY
+ActionController::Routing::Routes.draw do |map|
+end
+
+  RUBY
+end
+
 # generate rspec, cucumber
 generate :rspec
 generate :cucumber
 
+# add machinist blueprints file
+File.open('spec/blueprints.rb', 'w') do |file|
+  file << <<-RUBY
+require 'machinist/active_record'
+require 'sham'
+require 'faker'
+
+Sham.define do
+end
+
+  RUBY
+end
+
+# require blueprints.rb from features/support/env.rb
+gsub_file 'features/support/env.rb', /require 'cucumber\/rails\/world'/ do |match|
+  "#{match}\nrequire 'spec/blueprints'"
+end
+
 # migrate so rake will run out of the box
 rake "db:migrate"
+
+# git
+git :init
+git :add => '.'
+git :commit => '-a -m "Initial commit"'
+
