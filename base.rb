@@ -8,6 +8,9 @@ FileUtils.rm 'public/javascripts/prototype.js'
 FileUtils.rm 'public/index.html'
 FileUtils.rm 'public/images/rails.png'
 
+# remove 'test' directory as I use specs and cucumber
+FileUtils.rm_rf 'test'
+
 # add initializer for activerecord errors without divitis infection
 initializer 'custom_activerecord_view_errors.rb', <<-RUBY
 module ActionView
@@ -25,30 +28,24 @@ end
 RUBY
 
 # no default route
-File.open('config/routes.rb', 'w') do |file|
-  file << <<-RUBY
+file 'config/routes.rb', <<-RUBY
 ActionController::Routing::Routes.draw do |map|
 end
-
-  RUBY
-end
+RUBY
 
 # generate rspec, cucumber
 generate :rspec
 generate :cucumber
 
 # add machinist blueprints file
-File.open('spec/blueprints.rb', 'w') do |file|
-  file << <<-RUBY
+file 'spec/blueprints.rb', <<-RUBY
 require 'machinist/active_record'
 require 'sham'
 require 'faker'
 
 Sham.define do
 end
-
-  RUBY
-end
+RUBY
 
 # require blueprints.rb from features/support/env.rb
 gsub_file 'features/support/env.rb', /require 'cucumber\/rails\/world'/ do |match|
@@ -59,6 +56,13 @@ end
 rake "db:migrate"
 
 # git
+file '.gitignore', <<-FILE
+rerun.txt
+log
+tmp
+webrat-*.html
+FILE
+
 git :init
 git :add => '.'
 git :commit => '-a -m "Initial commit"'
