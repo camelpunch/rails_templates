@@ -47,10 +47,13 @@ Sham.define do
 end
 RUBY
 
-# require blueprints.rb from features/support/env.rb
-gsub_file 'features/support/env.rb', /require 'cucumber\/rails\/world'/ do |match|
-  "#{match}\nrequire 'spec/blueprints'"
-end
+# require blueprints.rb from features/support/extensions.rb
+file 'features/support/extensions.rb', <<-RUBY
+require 'spec/blueprints'
+RUBY
+
+# remove element_locator line from features/support/env.rb
+gsub_file 'features/support/env.rb', /require 'cucumber\/webrat\/element_locator'.*/, ''
 
 # migrate so rake will run out of the box
 rake "db:migrate"
