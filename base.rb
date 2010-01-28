@@ -60,6 +60,7 @@ rake "db:migrate"
 
 # git
 file '.gitignore', <<-FILE
+db/*.sqlite3*
 rerun.txt
 log
 tmp
