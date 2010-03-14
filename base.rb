@@ -62,8 +62,8 @@ rake "db:migrate"
 file '.gitignore', <<-FILE
 db/*.sqlite3*
 rerun.txt
-log
-tmp
+log/*
+tmp/*
 webrat-*.html
 FILE
 
