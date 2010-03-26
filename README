@@ -1,2 +1,6 @@
 Just a bunch of Rails templates, mainly a case of removing cruft that comes with
 Rails, and adding commonly used stuff.
+
+To use:
+
+rails -m /path/to/base.rb name_of_project
